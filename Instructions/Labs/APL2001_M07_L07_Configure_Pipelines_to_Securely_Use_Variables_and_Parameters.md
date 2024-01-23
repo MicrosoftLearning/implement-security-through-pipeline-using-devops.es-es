@@ -30,11 +30,11 @@ Empiece por importar la canalización de CI denominada [eshoponweb-ci.yml](https
 
 1. Vaya a **Pipelines (Canalizaciones) > Pipelines (Canalizaciones)**.
 
-1. Seleccione el botón **New Pipeline (Nueva canalización)**.
+1. Seleccione **Crear canalización**.
 
-1. Seleccione **Git de Azure Repos (YAML)**.
+1. Selecciona **GIT de Azure Repos (YAML)**.
 
-1. Seleccione el repositorio **eShopOnWeb**.
+1. Selecciona el repositorio **eShopOnWeb**.
 
 1. Seleccione **Archivo YAML de Azure Pipelines existente**.
 
@@ -42,7 +42,8 @@ Empiece por importar la canalización de CI denominada [eshoponweb-ci.yml](https
 
 1. Haga clic en el botón **Run (Ejecutar)** para ejecutar la canalización.
 
-1. La canalización tomará un nombre basado en el nombre del proyecto. Cámbielo para identificar mejor la canalización.
+   > [!NOTE]
+   > La canalización tomará un nombre basado en el nombre del proyecto. Cámbielo para identificar mejor la canalización.
 
 1. Vaya a **Pipelines (Canalizaciones) > Pipelines (Canalizaciones)** y seleccione la canalización creada recientemente. Seleccione los puntos suspensivos y la opción **Rename/move (Cambiar nombre/mover)**.
 
@@ -54,106 +55,108 @@ En esta tarea, establecerá los tipos de parámetro y parámetro para la canaliz
 
 1. Vaya a **Pipelines (Canalizaciones) > Pipelines (Canalizaciones)** y seleccione la canalización **eshoponweb-ci-parameters**.
 
-1. Seleccione **Edit (Editar)**.
+1. Seleccione **Editar**.
 
-1. Agregue los siguientes parámetros en la parte superior del archivo YAML:
+1. Agregue las siguientes secciones de parámetros y recursos a la parte superior del archivo YAML:
 
-    ```YAML
-    parameters:
-    - name: dotNetProjects
-      type: string
-      default: '**/*.sln'
-    - name: testProjects
-      type: string
-      default: 'tests/UnitTests/*.csproj'
+   ```yaml
+   parameters:
+   - name: dotNetProjects
+     type: string
+     default: '**/*.sln'
+   - name: testProjects
+     type: string
+     default: 'tests/UnitTests/*.csproj'
 
-    resources:
-      repositories:
-      - repository: self
-        trigger: none
+   resources:
+     repositories:
+     - repository: self
+       trigger: none
 
-    stages:
-    - stage: Build
-      displayName: Build .Net Core Solution
-    ```
+   ```
 
-1. Reemplace las rutas de acceso codificadas de forma codificada en las tareas “Restaurar”, “Compilar” y “Probar” por los parámetros que acaba de crear.
-   - **Reemplace proyectos**: '**/*.sln' por proyectos: ${{ parameters.dotNetProjects }} en las tareas “Restaurar” y “Compilar”.
-   - **Reemplace proyectos**: "tests/UnitTests/*.csproj" por proyectos: ${{ parameters.testProjects }} en la tarea “Probar”.
+1. Reemplace las rutas de acceso codificadas en las tareas `Restore`, `Build` y `Test` por los parámetros que acaba de crear.
 
-    El archivo YAML debería tener este aspecto:
+   - **Reemplazar proyectos**: `**/*.sln` por proyectos: ${{ parameters.dotNetProjects }} en las tareas `Restore` y `Build`.
+   - **Reemplazar proyectos**: `tests/UnitTests/*.csproj` por proyectos: ${{ parameters.testProjects }} en la tarea `Test`.
 
-    ```YAML
-        steps:
-        - task: DotNetCoreCLI@2
-          displayName: Restore
-          inputs:
-            command: 'restore'
-            projects: ${{ parameters.dotNetProjects }}
-            feedsToUse: 'select'
-    
-        - task: DotNetCoreCLI@2
-          displayName: Build
-          inputs:
-            command: 'build'
-            projects: ${{ parameters.dotNetProjects }}
-    
-        - task: DotNetCoreCLI@2
-          displayName: Test
-          inputs:
-            command: 'test'
-            projects: ${{ parameters.testProjects }}
+   Las tareas `Restore`, `Build` y `Test` en la sección de pasos del archivo YAML deben tener este aspecto:
 
-    ```
+   ```yaml
+       steps:
+       - task: DotNetCoreCLI@2
+         displayName: Restore
+         inputs:
+           command: 'restore'
+           projects: ${{ parameters.dotNetProjects }}
+           feedsToUse: 'select'
+   
+       - task: DotNetCoreCLI@2
+         displayName: Build
+         inputs:
+           command: 'build'
+           projects: ${{ parameters.dotNetProjects }}
+   
+       - task: DotNetCoreCLI@2
+         displayName: Test
+         inputs:
+           command: 'test'
+           projects: ${{ parameters.testProjects }}
 
-1. Guarde la canalización y ejecútelo, debería ejecutarse correctamente.
+   ```
 
-    ![Captura de pantalla de la ejecución de canalización con parámetros.](media/pipeline-parameters-run.png)
+1. Guarde y ejecute la canalización. Compruebe que la ejecución de canalización se completa correctamente.
 
-#### Tarea 2: Protección de variables y parámetros
+   ![Captura de pantalla de la ejecución de canalización con parámetros.](media/pipeline-parameters-run.png)
+
+#### Tarea 3: Protección de variables y parámetros
 
 En esta tarea, protegerá las variables y los parámetros de la canalización mediante grupos de variables.
 
 1. Vaya a **Pipelines (Canalizaciones) > Library (Biblioteca)**.
 
-1. Seleccione el botón **+ Variable group (+ Grupo de variables)** para crear un grupo de variables. Asígnele un nombre como **BuildConfigurations**.
+1. Seleccione el botón **+ Grupo de variables** para crear un nuevo grupo de variables denominado **BuildConfigurations**.
 
 1. Agregue una variable denominada **buildConfiguration** y establezca su valor en `Release`.
 
 1. Guarde el grupo de variables.
 
-    ![Captura de pantalla del grupo de variables con BuildConfigurations.](media/eshop-variable-group.png)
+   ![Captura de pantalla del grupo de variables con BuildConfigurations.](media/eshop-variable-group.png)
 
 1. Seleccione el botón **Pipeline permissions (Permisos de canalización)** y, luego, el botón **+** para agregar una canalización.
 
 1. Seleccione la canalización **eshoponweb-ci-parameters** para permitir que la canalización use el grupo de variables.
 
-    ![Captura de pantalla de los permisos de canalización.](media/pipeline-permissions.png)
+   ![Captura de pantalla de los permisos de canalización.](media/pipeline-permissions.png)
 
-1. (Opcional) También puede establecer usuarios o grupos específicos para poder editar el grupo de variables haciendo clic en el botón **Security (Seguridad)**.
+   > [!NOTE]
+   > También puede establecer usuarios o grupos específicos para poder editar el grupo de variables haciendo clic en el botón **Seguridad**.
 
-1. Vuelva al archivo YAML y, en la parte superior del archivo, justo debajo de los parámetros, haga referencia al grupo de variables agregando lo siguiente:
+1. Vaya a **Pipelines (Canalizaciones) > Pipelines (Canalizaciones)**.
 
-    ```YAML
-    variables:
-      - group: BuildConfigurations
-    
-    ```
+1. Abra la canalización **eshoponweb-ci-parameters** y seleccione **Edit (Editar)**.
+
+1. En la parte superior del archivo yml, justo debajo de los parámetros, haga referencia al grupo de variables agregando lo siguiente:
+
+   ```yaml
+   variables:
+     - group: BuildConfigurations
+   ```
 
 1. En la tarea “Compilar”, reemplace el comando “build” por las líneas siguientes para usar la configuración de compilación del grupo de variables.
 
-    ```YAML
-    command: 'build'
-    projects: ${{ parameters.dotNetProjects }}
-    configuration: $(buildConfiguration)
-    
-    ```
+   ```yaml
+           command: 'build'
+           projects: ${{ parameters.dotNetProjects }}
+           configuration: $(buildConfiguration)
+   ```
 
 1. Guarde y ejecute la canalización. Debe ejecutarse correctamente con la configuración de compilación establecida en `Release`. Para comprobarlo, examine los registros de la tarea “Compilar”.
 
-Siguiendo este enfoque, puede proteger las variables y los parámetros mediante el uso de grupos de variables sin tener que codificarlos de forma difícil en el archivo YAML.
+> [!NOTE]
+> Siguiendo este enfoque, puede proteger las variables y los parámetros mediante el uso de grupos de variables sin tener que codificarlos de forma difícil en archivos YAML.
 
-#### Tarea 3: Validación de variables y parámetros obligatorios
+#### Tarea 4: Validación de variables y parámetros obligatorios
 
 En esta tarea, validará las variables obligatorias antes de que se ejecute la canalización.
 
@@ -161,49 +164,44 @@ En esta tarea, validará las variables obligatorias antes de que se ejecute la c
 
 1. Abra la canalización **eshoponweb-ci-parameters** y seleccione **Edit (Editar)**.
 
-1. Agregue una nueva fase como primera fase denominada **Validate (Validar)** para validar las variables obligatorias antes de que se ejecute la canalización.
+1. En la sección de fases, al principio (siguiendo la línea `stage:`), agregue una nueva fase denominada **Validación** para validar las variables obligatorias antes de que se ejecute la canalización.
 
-    ```YAML
-    - stage: Validate
-      displayName: Validate mandatory variables
-      jobs:
-      - job: ValidateVariables
-        pool:
-          vmImage: ubuntu-latest
-        steps:
-        - script: |
-            if [ -z "$(buildConfiguration)" ]; then
-              echo "Error: buildConfiguration variable is not set"
-              exit 1
-            fi
-          displayName: 'Validate Variables'
-    
+   ```yaml
+   - stage: Validate
+     displayName: Validate mandatory variables
+     jobs:
+     - job: ValidateVariables
+       pool:
+         vmImage: ubuntu-latest
+       steps:
+       - script: |
+           if [ -z "$(buildConfiguration)" ]; then
+             echo "Error: buildConfiguration variable is not set"
+             exit 1
+           fi
+         displayName: 'Validate Variables'
     ```
 
-    > [!NOTE]
-    > Esta fase ejecutará un script para validar la variable buildConfiguration. Si no se establece la variable, se producirá un error en el script y se detendrá la canalización.
+   > [!NOTE]
+   > Esta fase ejecutará un script para validar la variable buildConfiguration. Si no se establece la variable, se producirá un error en el script y se detendrá la canalización.
 
-1. Haga que la etapa de **compilación** dependa de la etapa de **validación** agregando dependsOn: Validate en la etapa de compilación:
+1. Haga que la fase de **Compilación** dependa de la fase de **Validación** agregando `dependsOn: Validate` al principio de la fase de **Compilación**:
 
-    ```YAML
-    - stage: Build
-      displayName: Build .Net Core Solution
-      dependsOn: Validate
-    
-    ```
+   ```yaml
+   - stage: Build
+     displayName: Build .Net Core Solution
+     dependsOn: Validate
+      ```
 
 1. Guarde y ejecute la canalización. Se ejecutará correctamente porque la variable buildConfiguration se establece en el grupo de variables.
 
 1. Para probar la validación, quite la variable buildConfiguration del grupo de variables o elimine el grupo de variables y vuelva a ejecutar la canalización. No debería completarse y debería aparecer el siguiente error:
 
-    Debería ver el siguiente error en los registros:
+   ```yaml
+   Error: buildConfiguration variable is not set   
+   ```
 
-    ```YAML
-    Error: buildConfiguration variable is not set
-    
-    ```
-
-    ![Captura de pantalla de la ejecución de canalización con error de validación.](media/pipeline-validation-fail.png)
+   ![Captura de pantalla de la ejecución de canalización con error de validación.](media/pipeline-validation-fail.png)
 
 1. Vuelva a agregar el grupo de variables y la variable buildConfiguration al grupo de variables y vuelva a ejecutar la canalización. Debería ejecutarse correctamente.
 
