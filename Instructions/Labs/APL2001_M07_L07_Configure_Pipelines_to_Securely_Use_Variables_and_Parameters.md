@@ -77,33 +77,37 @@ En esta tarea, establecerá los tipos de parámetro y parámetro para la canaliz
 
 1. Reemplace las rutas de acceso codificadas en las tareas `Restore`, `Build` y `Test` por los parámetros que acaba de crear.
 
-   - **Reemplazar proyectos**: `**/*.sln` por proyectos: ${{ parameters.dotNetProjects }} en las tareas `Restore` y `Build`.
-   - **Reemplazar proyectos**: `tests/UnitTests/*.csproj` por proyectos: ${{ parameters.testProjects }} en la tarea `Test`.
+   - **Reemplazar proyectos**: `**/*.sln` por proyectos: `${{ "{{" }} parameters.dotNetProjects }}` en las tareas `Restore` y `Build`.
+   - **Reemplazar proyectos**: `tests/UnitTests/*.csproj` por proyectos: `${{ "{{" }} parametertestProjects }}` en la tarea `Test`
 
-   Las tareas `Restore`, `Build` y `Test` en la sección de pasos del archivo YAML deben tener este aspecto:
+    Las tareas `Restore`, `Build` y `Test` en la sección de pasos del archivo YAML deben tener este aspecto:
 
-   ```yaml
-       steps:
-       - task: DotNetCoreCLI@2
-         displayName: Restore
-         inputs:
-           command: 'restore'
-           projects: ${{ parameters.dotNetProjects }}
-           feedsToUse: 'select'
-   
-       - task: DotNetCoreCLI@2
-         displayName: Build
-         inputs:
-           command: 'build'
-           projects: ${{ parameters.dotNetProjects }}
-   
-       - task: DotNetCoreCLI@2
-         displayName: Test
-         inputs:
-           command: 'test'
-           projects: ${{ parameters.testProjects }}
+    {% raw %}
 
-   ```
+    ```yaml
+    steps:
+    - task: DotNetCoreCLI@2
+      displayName: Restore
+      inputs:
+        command: 'restore'
+        projects: ${{ parameters.dotNetProjects }}
+        feedsToUse: 'select'
+    
+    - task: DotNetCoreCLI@2
+      displayName: Build
+      inputs:
+        command: 'build'
+        projects: ${{ parameters.dotNetProjects }}
+    
+    - task: DotNetCoreCLI@2
+      displayName: Test
+      inputs:
+        command: 'test'
+        projects: ${{ parameters.testProjects }}
+    
+    ```
+
+    {% endraw %}
 
 1. Guarde y ejecute la canalización. Compruebe que la ejecución de canalización se completa correctamente.
 
@@ -145,11 +149,15 @@ En esta tarea, protegerá las variables y los parámetros de la canalización me
 
 1. En la tarea “Compilar”, reemplace el comando “build” por las líneas siguientes para usar la configuración de compilación del grupo de variables.
 
-   ```yaml
-           command: 'build'
-           projects: ${{ parameters.dotNetProjects }}
-           configuration: $(buildConfiguration)
-   ```
+    {% raw %}
+
+    ```yaml
+            command: 'build'
+            projects: ${{ parameters.dotNetProjects }}
+            configuration: $(buildConfiguration)
+    ```
+
+    {% endraw %}
 
 1. Guarde y ejecute la canalización. Debe ejecutarse correctamente con la configuración de compilación establecida en `Release`. Para comprobarlo, examine los registros de la tarea “Compilar”.
 
@@ -166,42 +174,42 @@ En esta tarea, validará las variables obligatorias antes de que se ejecute la c
 
 1. En la sección de fases, al principio (siguiendo la línea `stage:`), agregue una nueva fase denominada **Validación** para validar las variables obligatorias antes de que se ejecute la canalización.
 
-   ```yaml
-   - stage: Validate
-     displayName: Validate mandatory variables
-     jobs:
-     - job: ValidateVariables
-       pool:
-         vmImage: ubuntu-latest
-       steps:
-       - script: |
-           if [ -z "$(buildConfiguration)" ]; then
-             echo "Error: buildConfiguration variable is not set"
-             exit 1
-           fi
-         displayName: 'Validate Variables'
-    ```
+    ```yaml
+    - stage: Validate
+      displayName: Validate mandatory variables
+      jobs:
+      - job: ValidateVariables
+        pool:
+          vmImage: ubuntu-latest
+        steps:
+        - script: |
+            if [ -z "$(buildConfiguration)" ]; then
+              echo "Error: buildConfiguration variable is not set"
+              exit 1
+            fi
+          displayName: 'Validate Variables'
+     ```
 
-   > [!NOTE]
-   > Esta fase ejecutará un script para validar la variable buildConfiguration. Si no se establece la variable, se producirá un error en el script y se detendrá la canalización.
+    > [!NOTE]
+    > Esta fase ejecutará un script para validar la variable buildConfiguration. Si no se establecen las variables, se producirá un error en el script y se detendrá la canalización.
 
 1. Haga que la fase de **Compilación** dependa de la fase de **Validación** agregando `dependsOn: Validate` al principio de la fase de **Compilación**:
 
-   ```yaml
-   - stage: Build
-     displayName: Build .Net Core Solution
-     dependsOn: Validate
-      ```
+    ```yaml
+    - stage: Build
+      displayName: Build .Net Core Solution
+      dependsOn: Validate
+    ```
 
 1. Guarde y ejecute la canalización. Se ejecutará correctamente porque la variable buildConfiguration se establece en el grupo de variables.
 
 1. Para probar la validación, quite la variable buildConfiguration del grupo de variables o elimine el grupo de variables y vuelva a ejecutar la canalización. No debería completarse y debería aparecer el siguiente error:
 
-   ```yaml
-   Error: buildConfiguration variable is not set   
-   ```
+    ```yaml
+    Error: buildConfiguration variable is not set   
+    ```
 
-   ![Captura de pantalla de la ejecución de canalización con error de validación.](media/pipeline-validation-fail.png)
+    ![Captura de pantalla de la ejecución de canalización con error de validación.](media/pipeline-validation-fail.png)
 
 1. Vuelva a agregar el grupo de variables y la variable buildConfiguration al grupo de variables y vuelva a ejecutar la canalización. Debería ejecutarse correctamente.
 
