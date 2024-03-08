@@ -15,7 +15,7 @@ Estos ejercicios duran aproximadamente **30** minutos.
 Necesitará una suscripción de Azure, una organización de Azure DevOps y la aplicación eShopOnWeb para seguir los laboratorios.
 
 - Siga los pasos para [validar el entorno de laboratorio](APL2001_M00_Validate_Lab_Environment.md).
-- Instale un agente autohospedado siguiendo el laboratorio [Configuración de agentes y grupos de agentes para canalizaciones seguras](/Instructions/Labs/APL2001_M03_L03_Configure_Agents_And_Agent_Pools_for_Secure_Pipelines.md) o los pasos descritos en [Instalación de un agente autohospedado](https://docs.microsoft.com/azure/devops/pipelines/agents/v2-windows?view=azure-devops#install).
+- Instale un agente autohospedado siguiendo el laboratorio [Configuración de agentes y grupos de agentes para canalizaciones seguras](/Instructions/Labs/APL2001_M02_L02_Configure_Agents_And_Agent_Pools_for_Secure_Pipelines.md) o los pasos descritos en [Instalación de un agente autohospedado](https://docs.microsoft.com/azure/devops/pipelines/agents/v2-windows?view=azure-devops#install).
 
 ## Instrucciones
 
@@ -60,7 +60,7 @@ En este ejercicio, importará y ejecutará la canalización de CI para la aplica
 
 1. En el explorador, abra Azure Portal desde `https://portal.azure.com`.
 
-1. En Azure Portal, vaya a la página donde se muestra la máquina virtual de Azure **eshoponweb-vm** que implementó en este laboratorio.
+1. En Azure Portal, vaya a la página que muestra la máquina virtual de Azure **eshoponweb-vm** que ha implementado en este laboratorio
 
 1. En la página de la máquina virtual de Azure **eshoponweb-vm**, en la barra de herramientas, seleccione **Iniciar** para iniciarla.
 
@@ -253,29 +253,29 @@ En este ejercicio, quitará los recursos de Azure y Azure DevOps creados en este
 
 1. Vaya a **Pipelines (Canalizaciones) > Pipelines (Canalizaciones)**.
 
-1. Vaya a **Canalizaciones > canalizaciones** y elimine las canalizaciones existentes.
+1. Vaya a **Canalizaciones > Canalizaciones** y elimine las canalizaciones existentes.
 
-#### Tarea 3: Volver a crear el repositorio de Azure DevOps
+#### Tarea 3: Volver a crear el repositorio de Azure DevOps
 
-1. En el portal de Azure DevOps, en el proyecto **eShopOnWeb**, seleccione **Configuración del proyecto** en la esquina inferior izquierda.
+1. En el portal de Azure DevOps, en el proyecto **eShopOnWeb**, seleccione **Configuración del proyecto** en la esquina inferior izquierda.
 
-1. En el menú vertical del lado izquierdo **Configuración del proyecto**, en la sección **Repositorios**, seleccione **Repositorios**.
+1. En el menú vertical **Configuración del proyecto** en el lado izquierdo, en la sección **Repos**, seleccione**Repositorios**.
 
-1. En el panel **Todos los repositorios**, mantenga el puntero sobre el extremo derecho de la entrada del repositorio **eShopOnWeb** hasta que aparezca el icono de puntos suspensivos **Más opciones**; selecciónelo y, en el menú **Más opciones**, seleccione **Cambiar nombre**.  
+1. En el panel **Todos los repositorios**, mantenga el puntero sobre el extremo derecho de la entrada del repositorio **eShopOnWeb** hasta que aparezca el icono de puntos suspensivos de **Más opciones**; selecciónelo y, en el menú **Más opciones**, seleccione **Cambiar nombre**.  
 
-1. En la ventana **Cambiar nombre del repositorio eShopOnWeb** ventana, en el cuadro de texto **Nombre del repositorio**, escriba **eShopOnWeb_old** y seleccione **Cambiar nombre**.
+1. En la ventana **Cambiar nombre del repositorio eShopOnWeb**, en el cuadro de texto **Nombre del repositorio**, escriba **eShopOnWeb_old** y seleccione **Cambiar nombre**.
 
-1. De nuevo en el panel **Todos los repositorios**, seleccione **+ Crear**.
+1. Nuevamente en el panel **Todos los repositorios**, seleccione **+ Crear**.
 
 1. En el panel **Crear un repositorio**, en el cuadro de texto **Nombre del repositorio**, escriba **eShopOnWeb**, desactive la casilla **Agregar un archivo LÉAME** y seleccione **Crear**.
 
-1. En el panel **Todos los repositorios**, mantenga el puntero sobre el extremo derecho de la entrada del repositorio **eShopOnWeb_old** hasta que aparezca el icono de puntos suspensivos **Más opciones**; selecciónelo y, en el menú **Más opciones**, seleccione **Eliminar**.  
+1. De vuelta en el panel **Todos los repositorios**, mantenga el puntero sobre el extremo derecho de la entrada del repositorio **eShopOnWeb_old** hasta que aparezca el icono de puntos suspensivos **Más opciones**; selecciónelo y, en el menú **Más opciones**, seleccione **Eliminar**.  
 
 1. En la ventana **Eliminar repositorio eShopOnWeb_old**, escriba **eShopOnWeb_old** y seleccione **Eliminar**.
 
-1. En el menú de navegación izquierdo del portal de Azure DevOps, seleccione **Repositorios**.
+1. En el menú de navegación izquierdo del portal de Azure DevOps, seleccione **Repositorios**.
 
-1. En el panel **eShopOnWeb está vacío. Agregue código**, seleccione **Importar un repositorio**.
+1. En el panel **eShopOnWeb está vacío. Agregue código.**, seleccione **Importar un repositorio**.
 
 1. En la ventana **Importar un repositorio de Git**, pegue la siguiente dirección URL `https://github.com/MicrosoftLearning/eShopOnWeb` y seleccione **Importar**:
 
