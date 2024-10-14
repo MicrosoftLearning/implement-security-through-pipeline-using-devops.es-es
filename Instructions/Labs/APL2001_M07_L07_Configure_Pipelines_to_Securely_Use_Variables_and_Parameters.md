@@ -77,8 +77,8 @@ En esta tarea, establecerá los tipos de parámetro y parámetro para la canaliz
 
 1. Reemplace las rutas de acceso codificadas en las tareas `Restore`, `Build` y `Test` por los parámetros que acaba de crear.
 
-   - **Reemplazar proyectos**: `**/*.sln` por proyectos: `${{ "{{" }} parameters.dotNetProjects }}` en las tareas `Restore` y `Build`.
-   - **Reemplazar proyectos**: `tests/UnitTests/*.csproj` por proyectos: `${{ "{{" }} parametertestProjects }}` en la tarea `Test`
+   - **Reemplazar proyectos**: `**/*.sln` por proyectos: `${{ parameters.dotNetProjects }}` en las tareas `Restore` y `Build`.
+   - **Reemplazar proyectos**: `tests/UnitTests/*.csproj` por proyectos: `${{ parameters.testProjects }}` en la tarea `Test`
 
     Las tareas `Restore`, `Build` y `Test` en la sección de pasos del archivo YAML deben tener este aspecto:
 
