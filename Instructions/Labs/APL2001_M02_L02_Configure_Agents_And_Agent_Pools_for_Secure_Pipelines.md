@@ -53,7 +53,7 @@ En este ejercicio, creará una máquina virtual (VM) de Azure y la usará para c
    | Lista desplegable de **Suscripción** | Seleccione su suscripción a Azure. |
    | Sección **Grupo de recursos** | Cree un grupo de recursos denominado **rg-eshoponweb-agentpool**. |
    | Cuadro de texto **Nombre de máquina virtual**  | Escriba el nombre que prefiera, por ejemplo, **eshoponweb-vm**. |
-   | Lista desplegable de **región** | Seleccione la misma región de Azure que eligió anteriormente en este laboratorio. |
+   | Lista desplegable de **región** | Puedes elegir tu región de [Azure](https://azure.microsoft.com/explore/global-infrastructure/geographies) más cercana. Por ejemplo, "eastus", "eastasia", "westus", etc. |
    | Lista desplegable **Opciones de disponibilidad** | Seleccione **No se requiere redundancia de la infraestructura**. |
    | Lista desplegable **Tipo de seguridad** | Seleccione la opción **Máquinas virtuales de inicio seguro**. |
    | Lista desplegable de **imágenes** | Seleccione la imagen **Windows Server 2022 Datacenter: Azure Edition - x64 Gen2**. |
@@ -67,18 +67,21 @@ En este ejercicio, creará una máquina virtual (VM) de Azure y la usará para c
 
 1. En la pestaña **Revisar y crear**, seleccione **Crear**.
 
-   > [!NOTE]
-   > Espere a que se complete el proceso de aprovisionamiento. Este proceso tardará alrededor de 2 minutos.
+   > **Nota**: Espere a que se complete el proceso de aprovisionamiento. Este proceso tardará alrededor de 2 minutos.
 
-1. En Azure Portal, vaya a la página que muestra la configuración de la VM de Azure recién creada. 
+1. En Azure Portal, vaya a la página que muestra la configuración de la VM de Azure recién creada.
 
-1. En la página de la VM de Azure, seleccione **Conectar**, en el menú desplegable, seleccione **Conectar**y, luego, seleccione **Descargar archivo RDP**y use el archivo RDP descargado para establecer una sesión de Escritorio remoto en el sistema operativo que se ejecuta en la VM de Azure.
+1. En la página de VM de Azure, selecciona **Conectar**, en el menú desplegable, selecciona **Conectar** y después selecciona **Descargar archivo RDP**.
+
+1. Usa el archivo RDP descargado para establecer una sesión de Escritorio remoto en el sistema operativo que se ejecuta en la VM de Azure.
 
 #### Tarea 2: Creación de un grupo de agentes
 
 1. En la sesión de Escritorio remoto a la VM de Azure, inicie el explorador web de Microsoft Edge.
 
-1. En el explorador web, vaya al portal de Azure DevOps en `https://dev.azure.com` e inicie sesión para acceder a la organización.
+1. En el explorador web, vaya al portal de Azure DevOps en `https://aex.dev.azure.com` e inicie sesión para acceder a la organización.
+
+   > **Nota**: Si es la primera vez que accedes al portal de Azure DevOps, es posible que tengas que crear tu perfil.
 
 1. Abra el proyecto **eShopOnWeb** y seleccione **Configuración del proyecto** en el menú inferior izquierdo.
 
@@ -92,6 +95,8 @@ En este ejercicio, creará una máquina virtual (VM) de Azure y la usará para c
 
    ![Captura de pantalla que muestra cómo agregar opciones de grupo de agentes con el tipo autohospedado.](media/create-new-agent-pool-self-hosted-agent.png)
 
+   > **Nota:** No se recomienda conceder permiso de acceso a todas las canalizaciones para entornos de producción. Solo se usa en este laboratorio para simplificar la configuración de la canalización.
+
 1. Seleccione el botón **Crear** para crear el grupo de agentes.
 
 #### Tarea 3: Descarga y extracción de los archivos de instalación del agente
@@ -100,8 +105,7 @@ En este ejercicio, creará una máquina virtual (VM) de Azure y la usará para c
 
 1. Seleccione el botón **Nuevo agente** y, a continuación, el botón **Descargar** de la nueva ventana emergente **Descargar agente**.
 
-   > [!NOTE]
-   > Siga las instrucciones para instalar el agente.
+   > **Nota**: Sigue las instrucciones de instalación para instalar el agente y anota la versión descargada en el nombre de archivo (por ejemplo: vsts-agent-win-x64-3.246.0.zip).
 
 1. Inicie una sesión de PowerShell y ejecute los siguientes comandos para crear una carpeta denominada **agente**.
 
@@ -109,24 +113,21 @@ En este ejercicio, creará una máquina virtual (VM) de Azure y la usará para c
    mkdir agent ; cd agent        
    ```
 
-   > [!NOTE]
-   > Asegúrese de que se encuentra en la carpeta raíz del perfil de usuario o en la carpeta donde desea instalar el agente.
+   > **Nota**: Asegúrate de que estás en la carpeta donde deseas instalar el agente, por ejemplo, C:\agent.
 
 1. Ejecute el siguiente comando para extraer el contenido de los archivos del instalador del agente descargados:
 
    ```powershell
-   Add-Type -AssemblyName System.IO.Compression.FileSystem ; [System.IO.Compression.ZipFile]::ExtractToDirectory("$HOME\Downloads\vsts-agent-win-x64-3.232.0.zip", "$PWD")
+   Add-Type -AssemblyName System.IO.Compression.FileSystem ; [System.IO.Compression.ZipFile]::ExtractToDirectory("$HOME\Downloads\vsts-agent-win-x64-3.246.0.zip", "$PWD")
    ```
 
-   > [!NOTE]
-   > Si descargó el agente en otra ubicación (o la versión descargada difiere), ajuste el comando anterior en consecuencia.
+   > **Nota**: Si has descargado el agente en otra ubicación (o la versión descargada difiere), ajusta el comando anterior en consecuencia.
 
 #### Tarea 4: Creación de un token PAT
 
-> [!NOTE]
-> Antes de configurar el agente, debe crear un token PAT (a menos que tenga uno existente). Para crear un token PAT, siga estos pasos:
+> **Nota**: Antes de configurar el agente, debes crear un token PAT (a menos que tengas uno existente). Para crear un token PAT, siga estos pasos:
 
-1. En la sesión de Escritorio remoto a la VM de Azure, abra otra ventana del explorador, vaya al portal de Azure DevOps en `https://dev.azure.com`y acceda a la organización.
+1. En la sesión de Escritorio remoto de la VM de Azure, abre otra ventana del explorador, ve al portal de Azure DevOps en `https://aex.dev.azure.com` y accede a tu organización y proyecto.
 
 1. Seleccione **Configuración de usuario** en el menú superior derecho (directamente a la izquierda del icono de avatar del usuario).
 
@@ -159,7 +160,7 @@ En este ejercicio, creará una máquina virtual (VM) de Azure y la usará para c
 
 #### Tarea 5: Configuración del agente
 
-1. En la sesión de Escritorio remoto a la VM de Azure, vuelva a la ventana de PowerShell. Si es necesario, cambie del directorio actual a aquél en el que extrajo los archivos de instalación del agente anteriormente en este ejercicio. 
+1. En la sesión de Escritorio remoto a la VM de Azure, vuelva a la ventana de PowerShell. Si es necesario, cambie del directorio actual a aquél en el que extrajo los archivos de instalación del agente anteriormente en este ejercicio.
 
 1. Para configurar el agente a fin de que se ejecute desatendido, invoque el siguiente comando:
 
@@ -167,16 +168,15 @@ En este ejercicio, creará una máquina virtual (VM) de Azure y la usará para c
    .\config.cmd
    ```
 
-   > [!NOTE]
-   > Si desea ejecutar el agente de forma interactiva, use `.\run.cmd` en su lugar. 
+   > **Nota**: Si deseas ejecutar el agente de forma interactiva, usa `.\run.cmd` en su lugar.
 
 1. Para configurar el agente, realice las siguientes acciones cuando se le solicite:
 
-   - Escriba la dirección URL de la organización de Azure DevOps (**dirección URL del servidor**) en el formato `https://dev.azure.com/`{nombre de la organización}.
+   - Escriba la dirección URL de la organización de Azure DevOps (**dirección URL del servidor**) en el formato `https://aex.dev.azure.com`{nombre de la organización}.
    - Acepte el tipo de autenticación predeterminado (**PAT**).
    - Escriba el valor del token PAT que creó en el paso anterior.
-   - Escriba el nombre del grupo de agentes **eShopOnWebSelfPool** que creó anteriormente en este ejercicio.
-   - Escriba el nombre del agente **eShopOnWebSelfAgent**.
+   - Escribe el nombre del grupo de agentes **`eShopOnWebSelfPool`** que has creado anteriormente en este ejercicio.
+   - Escribe el nombre del agente **`eShopOnWebSelfAgent`**.
    - Acepte la carpeta de trabajo del agente predeterminada (_work).
    - Escriba **Y** para configurar el agente a fin de que se ejecute como servicio.
    - Escriba **Y** para habilitar SERVICE_SID_TYPE_UNRESTRICTED para el servicio del agente.
@@ -189,23 +189,39 @@ En este ejercicio, creará una máquina virtual (VM) de Azure y la usará para c
 
    ![Captura de pantalla que muestra la configuración del agente.](media/agent-configuration.png)
 
+   > **Nota**: El proceso de configuración del agente tardará unos minutos en completarse. Una vez hecho esto, verás un mensaje que indica que el agente se está ejecutando como servicio.
+
+   > [!IMPORTANT] Si ves un mensaje de error que indica que el agente no se está ejecutando, es posible que tengas que iniciar el servicio manualmente. Para ello, abre el applet **Servicios** del panel de control de Windows, busca el servicio denominado **Agente de Azure DevOps (eShopOnWebSelfAgent)** e inícialo.
+
+   > [!IMPORTANT] Si el agente no se inicia, es posible que tengas que elegir una carpeta diferente para el directorio de trabajo del agente. Para ello, vuelve a ejecutar el script de configuración del agente y elige otra carpeta.
+
 1. Para comprobar el estado del agente, cambie al explorador web que muestra el portal de Azure DevOps, vaya al grupo de agentes y haga clic en la pestaña **Agentes**. Debería ver el nuevo agente en la lista.
 
    ![Captura de pantalla que muestra el estado del agente.](media/agent-status.png)
 
-   > [!NOTE]
-   > Para obtener más información sobre los agentes de Windows, consulte: [Agentes de Windows autohospedados](https://learn.microsoft.com/azure/devops/pipelines/agents/windows-agent).
+   > **Nota**: Para obtener más información sobre los agentes de Windows, consulta: [Agentes de Windows autohospedados](https://learn.microsoft.com/azure/devops/pipelines/agents/windows-agent)
 
    > [!IMPORTANT]
    > Para que el agente pueda compilar e implementar recursos de Azure desde las canalizaciones de Azure DevOps (que configurará en los próximos laboratorios), debe instalar la CLI de Azure en el sistema operativo de la máquina virtual de Azure que hospeda el agente.
 
-1. Inicie un explorador web y vaya a la página [Instalación de la CLI de Azure en Windows](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli-windows?tabs=azure-cli#install-or-update).
+1. Inicie un explorador web y vaya a la página [Instalación de la CLI de Azure en Windows](https://learn.microsoft.com/cli/azure/install-azure-cli-windows?tabs=azure-cli#install-or-update).
 
-1. Descargue e instale la CLI de Azure. 
+1. Descargue e instale la CLI de Azure.
 
-1. En el explorador web, vaya a la página del instalador del SDK de Microsoft .NET 7.0 en `https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/sdk-7.0.404-windows-x64-installer`.
+1. (Opcional) Si lo prefieres, ejecuta el siguiente comando de PowerShell para instalar la CLI de Azure:
 
-1. Descargue e instale el SDK de Microsoft .NET 7.0.
+   ```powershell
+   $ProgressPreference = 'SilentlyContinue'; Invoke-WebRequest -Uri https://aka.ms/installazurecliwindows -OutFile .\AzureCLI.msi; Start-Process msiexec.exe -Wait -ArgumentList '/I AzureCLI.msi /quiet'; Remove-Item .\AzureCLI.msi
+   ```
+
+   > **Nota**: Si usas una versión diferente de la CLI de Azure, es posible que tengas que ajustar el comando anterior en consecuencia.
+
+1. En el explorador web, ve a la página del instalador del SDK de Microsoft .NET 8.0 en `https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/sdk-8.0.403-windows-x64-installer`.
+
+   > [!IMPORTANT]
+   > Debes instalar el SDK de .NET 8.0 (o superior) en la VM de Azure que hospeda el agente. Esto es necesario para compilar la aplicación eShopOnWeb en los próximos laboratorios. Cualquier otra herramienta o SDK necesarios para la compilación de la aplicación también debe instalarse en la VM de Azure.
+
+1. Descarga e instala el SDK de Microsoft .NET 8.0.
 
 ### Ejercicio 2: Creación y configuración de roles de seguridad
 
@@ -213,7 +229,7 @@ En este ejercicio, configurará la seguridad para el grupo de agentes.
 
 #### Tarea 3: Creación de un grupo de seguridad de red
 
-1. En la sesión de Escritorio remoto a la VM de Azure, en el explorador web que muestra el portal de Azure DevOps, en el panel **Configuración del proyecto**, en la sección **General**, seleccione **Permisos **.
+1. En la sesión de Escritorio remoto de la VM de Azure, en el explorador web que muestra el portal de Azure DevOps, en el panel **Configuración del proyecto**, en la sección **General**, selecciona **Permisos**.
 
 1. Seleccione el botón **Nuevo grupo**.
 
@@ -252,35 +268,12 @@ En esta tarea, administrará los permisos del grupo de agentes.
 
    ![Captura de pantalla que muestra la configuración de seguridad del grupo de agentes.](media/agent-pool-security.png)
 
-Ya tiene todo listo para usar de forma segura el grupo de agentes en las canalizaciones. Para obtener más información sobre los grupos de agentes, consulte [Grupos de agentes](https://learn.microsoft.com/azure/devops/pipelines/agents/pools-queues).
+Ya tiene todo listo para usar de forma segura el grupo de agentes en las canalizaciones. Puedes usar el nuevo grupo para agregar usuarios y administrar permisos para el grupo de agentes. Puedes volver a configurar el agente autohospedado instalado utilizando el nuevo grupo para asegurarte de que el agente tiene los permisos necesarios para ejecutar las canalizaciones y nada más. Por ejemplo, puedes agregar un usuario al grupo y configurar el agente para que se ejecute como ese usuario.
 
-### Ejercicio 4: Limpiar recursos de Azure y Azure DevOps
+Para obtener más información sobre los grupos de agentes, consulte [Grupos de agentes](https://learn.microsoft.com/azure/devops/pipelines/agents/pools-queues).
 
-En este ejercicio, realizará la limpieza posterior al laboratorio de los recursos de Azure DevOps creados en este laboratorio.
-
-#### Tarea 1: Detener y desasignar la máquina virtual de Azure
-
-> [!NOTE]
-> Usará la máquina virtual de Azure que creó en este laboratorio en el siguiente laboratorio, por lo que, en lugar de eliminarla, la detendrá y desasignará para eliminar los cargos de proceso.
-
-1. En Azure Portal, vaya a la página que muestra la máquina virtual de Azure **eshoponweb-vm** que ha implementado en este laboratorio
-
-1. En la página de la máquina virtual de Azure **eshoponweb-vm**, en la barra de herramientas, seleccione **Detener** para desasignarla.
-
-#### Tarea 2: Eliminación de recursos de Azure DevOps
-
-> [!NOTE]
-> Usará el agente autohospedado que creó en este laboratorio en el siguiente laboratorio, por lo que, en lugar de eliminarlo, solo revocará el token de acceso personal usado para configurarlo. Esto no impedirá que se ejecute más adelante.
-
-1. En el portal de Azure DevOps, seleccione **Configuración de usuario** en el menú superior derecho (directamente a la izquierda del icono de avatar del usuario).
-
-1. Seleccione el elemento de menú **Token de acceso personal**.
-
-   ![Captura de pantalla que muestra el menú Tokens de acceso personal.](media/personal-access-token-menu.png)
-
-1. Seleccione la entrada **eShopOnWebToken**. 
-
-1. Seleccione **Revocar** y, cuando se le pida que confirme, seleccione **Revocar** de nuevo.
+> [!IMPORTANT]
+> Recuerda eliminar los recursos creados en Azure Portal para evitar cargos innecesarios.
 
 ## Revisar
 
