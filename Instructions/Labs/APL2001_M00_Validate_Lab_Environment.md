@@ -20,6 +20,8 @@ En la preparación para los laboratorios, es fundamental tener el entorno config
 
 - [Azure CLI](https://learn.microsoft.com/cli/azure/install-azure-cli). Instale la CLI de Azure en las máquinas del agente autohospedado.
 
+- [.NET SDK: la versión más reciente](https://dotnet.microsoft.com/download/visual-studio-sdks). Instala el SDK .NET en las máquinas de los agentes autohospedados.
+
 ## Instrucciones para crear una organización de Azure DevOps (solo tiene que hacerlo una vez)
 
 > **Nota**: Comience en el paso 3 si ya tiene **cuenta de Microsoft** configurada y una suscripción activa de Azure vinculada a esa cuenta.
@@ -52,7 +54,19 @@ En la preparación para los laboratorios, es fundamental tener el entorno config
 
 1. Una vez que la pantalla muestre el identificador de suscripción de Azure vinculado en la parte superior, cambie el número de **trabajos paralelos de pago** de **CI/CD hospedados de MS** de 0 a **1**. Después, haga clic en el botón **Guardar** de la parte inferior.
 
-1. Puede **esperar al menos 3 horas antes de usar las funcionalidades de CI/CD** para que la nueva configuración se refleje en el back-end. De lo contrario, verá el mensaje *“No se ha comprado o concedido ningún paralelismo hospedado”.*
+   > **Nota**: puedes **esperar un par de minutos antes de usar las funcionalidades de CI/CD** para que la nueva configuración se refleje en el backend. De lo contrario, verá el mensaje *“No se ha comprado o concedido ningún paralelismo hospedado”.*
+
+1. En **Organización Configuración**, ve a la sección **Canalizaciones** y haz clic en **Configuración**.
+
+1. Pulsa el botón a**Desactivar** para **Deshabilitar la creación de canalizaciones de compilación clásicas** y **Deshabilitar la creación de canalizaciones de versión clásicas**.
+
+   > **Nota**: El interruptor **Deshabilitar la creación de canalizaciones de versión clásicas** establecido en **Activado** oculta las opciones de creación de canalizaciones de versión clásicas como el menú **Versión** de la sección **Canalización** de proyectos DevOps.
+
+1. En **Organización Configuración**, ve a la sección **Seguridad** y haz clic en **Directivas**.
+
+1. Cambie el interruptor a **Activado** para **permitir proyectos públicos.**
+
+   > **Nota**: Las extensiones usadas en algunos laboratorios pueden requerir un proyecto público para permitir el uso de la versión gratuita.
 
 ## Instrucciones para crear y configurar el proyecto de Azure DevOps (solo tiene que hacerlo una vez)
 
@@ -72,21 +86,21 @@ En primer lugar, creará un proyecto **eShopOnWeb** de Azure DevOps que se usar�
    - Avanzado: Control de versiones: **Git**
    - Avanzado: Proceso de elemento de trabajo: **Scrum**
 
-1. Seleccione **Crear**.
+1. Selecciona **Crear**.
 
    ![Crear proyecto](media/create-project.png)
 
-### Importación del repositorio de Git de eShopOnWeb
+### Importación del repositorio Git de eShopOnWeb
 
-Ahora, importará eShopOnWeb en el repositorio de Git.
+Ahora, importarás eShopOnWeb en el repositorio Git.
 
-1. Abra su explorador y navegue a su organización de Azure DevOps.
+1. Abre el explorador y ve a tu organización de Azure DevOps.
 
-1. Abra el proyecto **eShopOnWeb** creado anteriormente.
+1. Abre el proyecto **eShopOnWeb** creado anteriormente.
 
-1. Seleccione **Repositorios > Archivos**, **Importar un repositorio** y, después, seleccione **Importar**.
+1. Selecciona **Repositorios > Archivos**, **Importar un repositorio** y, después, selecciona **Importar**.
 
-1. En la ventana **Importar un repositorio de Git**, pegue la siguiente dirección URL `https://github.com/MicrosoftLearning/eShopOnWeb` y seleccione **Importar**:
+1. En la ventana **Importar un repositorio Git**, pega la siguiente dirección URL `https://github.com/MicrosoftLearning/eShopOnWeb` y selecciona **Importar**:
 
    ![Importar repositorio](media/import-repo.png)
 
@@ -96,68 +110,41 @@ Ahora, importará eShopOnWeb en el repositorio de Git.
    - El contenedor de carpetas **.devcontainer** está configurado para realizar el desarrollo con contenedores (ya sea localmente en VS Code o GitHub Codespaces).
    - La carpeta **.azure** contiene infraestructura de la plantilla de ARM y Bicep como plantillas de código.
    - Definiciones de flujo de trabajo de GitHub del contenedor de carpetas **.github**.
-   - La carpeta **src** contiene el sitio web de .NET 6 que se utiliza en los escenarios de laboratorio. 
+   - La carpeta **src** contiene el sitio web de .NET 8 que se usa en los escenarios de laboratorio.
 
-1. Deje abierta la ventana del explorador web.  
+1. Deja abierta la ventana del explorador web.  
 
-### Creación de una entidad de servicio y una conexión de servicio para acceder a los recursos de Azure
+1. Ve a **Repos > Ramas**.
 
-A continuación, creará una entidad de servicio mediante la CLI de Azure, y una conexión de servicio en Azure DevOps que le permitirá implementar y acceder a los recursos de la suscripción de Azure.
+1. Mantén el puntero sobre la rama **main** y haz clic en los puntos suspensivos a la derecha de la columna.
 
-1. Inicie un explorador web, vaya a Azure Portal en `https://portal.azure.com`, e inicie sesión con la cuenta de usuario que tenga el rol Propietario en la suscripción de Azure que va a usar en los laboratorios de este curso, así como el rol Administrador global en el inquilino de Microsoft Entra asociado a esta suscripción.
+1. Haz clic en **Establecer como rama predeterminada**.
 
-1. En Azure Portal, seleccione el botón **Cloud Shell** situado en la parte a la derecha del cuadro de búsqueda de la parte superior de la página.
+### Creación de una conexión de servicio para acceder a los recursos de Azure
 
-1. Si se le pide que seleccione **Bash** o **PowerShell**, seleccione **Bash**.
+A continuación, crearás una conexión de servicio en Azure DevOps que te permitirá implementar y acceder a los recursos de tu suscripción a Azure.
 
-   > [!NOTE]
-   > Si es la primera vez que inicia **Cloud Shell** y aparece el mensaje **No tiene ningún almacenamiento montado**, seleccione la suscripción que utiliza en este laboratorio y seleccione **Crear almacenamiento**.
+1. Vuelve al explorador web, ve al portal de Azure DevOps con el proyecto **eShopOnWeb** abierto y selecciona **Configuración del proyecto** en la esquina inferior izquierda del portal.
 
-1. En la solicitud de **Bash**, en el panel de **Cloud Shell**, ejecute los siguientes comandos para recuperar los valores del identificador de suscripción de Azure y los atributos de nombre de suscripción:
-
-   ```bash
-   subscriptionName=$(az account show --query name --output tsv)
-   subscriptionId=$(az account show --query id --output tsv)
-   echo $subscriptionName
-   echo $subscriptionId
-   ```
-
-   > [!NOTE]
-   > Copie ambos valores en un archivo de texto. Los necesitará en los laboratorios de este curso.
-
-1. En la solicitud de **Bash**, en el panel de **Cloud Shell**, ejecute el siguiente comando para crear una entidad de servicio:
-
-   ```bash
-   az ad sp create-for-rbac --name sp-eshoponweb-azdo --role contributor --scopes /subscriptions/$subscriptionId
-   ```
-
-   > [!NOTE]
-   > El comando generará una salida JSON. Copie los resultados en un archivo de texto. Lo necesitará en breve.
-
-   > [!NOTE]
-   > Registre el valor de, el nombre de la entidad de seguridad, su identificador y el identificador de inquilino incluidos en la salida JSON. Los necesitará en los laboratorios de este curso.
-
-1. Vuelva a la ventana del explorador web que muestra el portal de Azure DevOps con el proyecto **eShopOnWeb** abierto y seleccione **Configuración del proyecto** en la esquina inferior izquierda del portal.
-
-1. En Canalizaciones, seleccione **Conexiones de servicio** y, después, seleccione **Crear conexión de servicio**.
+1. En Canalizaciones, selecciona **Conexiones de servicio** y, después, selecciona el botón **Crear conexión de servicio**.
 
    ![Captura de pantalla del botón para crear la nueva conexión de servicio.](media/new-service-connection.png)
 
-1. En la hoja **New service connection (Nueva conexión de servicio)**, seleccione **Azure Resource Manager** y, después, seleccione **Next (Siguiente)** (es posible que deba desplazarse hacia abajo).
+1. En la hoja **Nueva conexión de servicio**, selecciona **Azure Resource Manager** y, después, selecciona **Siguiente** (es posible que debas desplazarte hacia abajo).
 
-1. Seleccione **Service Principal (Entidad de servicio) (manual)** y, después, seleccione **Next (Siguiente)**.
+1. Selecciona **Federación de identidades de carga de trabajo (automática)** y **Siguiente**.
 
-1. Rellene los campos vacíos con la información recopilada durante los pasos anteriores:
+   > **Nota**: también puedes usar **Federación de identidades de carga de trabajo (manual)** si prefieres configurar manualmente la conexión de servicio. Sigue los pasos de la [Documentación de Azure DevOps](https://learn.microsoft.com/azure/devops/pipelines/library/connect-to-azure) para crear una conexión de servicio manualmente.
 
-   - Identificador y nombre de la suscripción.
-   - Id. de entidad de servicio (o clientId/AppId), clave de entidad de servicio (o contraseña) y TenantId.
-   - En **Nombre de conexión de servicio**, escriba **azure subs**. Se hará referencia a este nombre en las canalizaciones de YAML para hacer referencia a la conexión de servicio con el fin de acceder a la suscripción de Azure.
+1. Rellena los campos vacíos con la información:
+    - **Suscripción**: selecciona tu suscripción a Azure.
+    - **Grupo de recursos**: selecciona el grupo de recursos en el que deseas implementar los recursos.
+    - **Nombre de conexión del servicio**: tipo **`azure subs`**. Se hará referencia a este nombre en las canalizaciones YAML para acceder a tu suscripción de Azure.
 
-   ![Captura de pantalla de la configuración de conexión de servicios de Azure](media/azure-service-connection.png)
+1. Asegúrate de que la opción **Conceder permiso de acceso a todas las canalizaciones** está desactivada y selecciona **Guardar**.
 
-1. No marque **Conceder permiso de acceso a todas las canalizaciones**. Seleccione **Verificar y guardar**.
+   > **Nota:** la opción **Conceder permiso de acceso a todas las canalizaciones** no se recomienda para entornos de producción. Solo se usa en este laboratorio para simplificar la configuración de la canalización.
 
-   > [!NOTE]
-   > No se recomienda la opción **Conceder permiso de acceso a todas las canalizaciones** para entornos de producción. Solo se usa en este laboratorio para simplificar la configuración de la canalización.
+   > **Nota**: si ves un mensaje de error que indica que no tienes los permisos necesarios para crear una conexión de servicio, inténtalo de nuevo o configura la conexión de servicio manualmente.
 
-Ya ha completado los pasos previos necesarios para continuar con los laboratorios.
+Ya has completado los pasos previos necesarios para continuar con los laboratorios.
