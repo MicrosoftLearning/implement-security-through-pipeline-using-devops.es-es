@@ -6,58 +6,57 @@ lab:
 
 # Configuración de canalizaciones para usar variables y parámetros de forma segura
 
-En este laboratorio, aprenderá a configurar canalizaciones para usar de forma segura variables y parámetros.
+En este laboratorio, aprenderás a configurar canalizaciones para usar de forma segura variables y parámetros.
 
 Estos ejercicios duran aproximadamente **20** minutos.
 
 ## Antes de comenzar
 
-Necesitará una suscripción de Azure, una organización de Azure DevOps y la aplicación eShopOnWeb para seguir los laboratorios.
+Necesitarás una suscripción a Azure, una organización de Azure DevOps y la aplicación eShopOnWeb para seguir los laboratorios.
 
-- Siga los pasos para [validar el entorno de laboratorio](APL2001_M00_Validate_Lab_Environment.md).
+- Sigue los pasos para [validar el entorno de laboratorio](APL2001_M00_Validate_Lab_Environment.md).
 
 ## Instrucciones
 
 ### Ejercicio 1: Garantizar los tipos de parámetros y variables
 
-#### Ejercicio 1: Importación y ejecución de la canalización de CI
+#### Tarea 1: (omitir si ya la has completado) Importación y ejecución de la canalización de CI
 
-Empiece por importar la canalización de CI denominada [eshoponweb-ci.yml](https://github.com/MicrosoftLearning/eShopOnWeb/blob/main/.ado/eshoponweb-ci.yml).
+Empecemos importando la canalización de CI denominada [eshoponweb-ci.yml](https://github.com/MicrosoftLearning/eShopOnWeb/blob/main/.ado/eshoponweb-ci.yml).
 
-1. Vaya al portal de Azure DevOps en `https://dev.azure.com` y abra su organización.
+1. Ve al portal de Azure DevOps en `https://aex.dev.azure.com` y abre tu organización.
 
-1. Abra el proyecto eShopOnWeb.
+1. Abre el proyecto **eShopOnWeb** en Azure DevOps.
 
-1. Vaya a **Pipelines (Canalizaciones) > Pipelines (Canalizaciones)**.
+1. Ve a **Canalizaciones > Canalizaciones**.
 
-1. Seleccione **Crear canalización**.
+1. Selecciona el botón **Crear canalización**.
 
-1. Selecciona **GIT de Azure Repos (YAML)**.
+1. Selecciona **Git de Azure Repos (YAML)**.
 
 1. Selecciona el repositorio **eShopOnWeb**.
 
-1. Seleccione **Archivo YAML de Azure Pipelines existente**.
+1. Selecciona el **archivo YAML de Azure Pipelines existente**.
 
-1. Seleccione el archivo **/.ado/eshoponweb-ci.yml** y seleccione **Continue (Continuar)**.
+1. Selecciona el archivo **/.ado/eshoponweb-ci.yml** y haz clic en **Continuar**.
 
-1. Haga clic en el botón **Run (Ejecutar)** para ejecutar la canalización.
+1. Haz clic en el botón **Ejecutar** para ejecutar la canalización.
 
-   > [!NOTE]
-   > La canalización tomará un nombre basado en el nombre del proyecto. Cámbielo para identificar mejor la canalización.
+   > **Nota**: la canalización adoptará un nombre en función del nombre del proyecto. Cambiarás el nombre para identificar la canalización con más facilidad.
 
-1. Vaya a **Pipelines (Canalizaciones) > Pipelines (Canalizaciones)** y seleccione la canalización creada recientemente. Seleccione los puntos suspensivos y la opción **Rename/move (Cambiar nombre/mover)**.
+1. Ve a **Canalizaciones > Canalizaciones** y selecciona la canalización creada recientemente. Selecciona los puntos suspensivos (...) y, a continuación, selecciona **Cambiar nombre/mover**.
 
-1. Asígnele el nombre **eshoponweb-ci-parameters** y seleccione **Save (Guardar)**.
+1. Asígnale el nombre **eshoponweb-ci** y selecciona **Guardar**.
 
 #### Tarea 2: Garantizar tipos de parámetros para canalizaciones YAML
 
-En esta tarea, establecerá los tipos de parámetro y parámetro para la canalización.
+En esta tarea, establecerás los tipos de parámetro y parámetro para la canalización.
 
-1. Vaya a **Pipelines (Canalizaciones) > Pipelines (Canalizaciones)** y seleccione la canalización **eshoponweb-ci-parameters**.
+1. Ve a **Canalizaciones > Canalizaciones** y selecciona la canalización **eshoponweb-ci**.
 
-1. Seleccione **Editar**.
+1. Selecciona **Editar**.
 
-1. Agregue las siguientes secciones de parámetros y recursos a la parte superior del archivo YAML:
+1. Agrega los siguientes parámetros a la parte superior de las secciones de trabajo del archivo YAML:
 
    ```yaml
    parameters:
@@ -68,21 +67,19 @@ En esta tarea, establecerá los tipos de parámetro y parámetro para la canaliz
      type: string
      default: 'tests/UnitTests/*.csproj'
 
-   resources:
-     repositories:
-     - repository: self
-       trigger: none
+   jobs:
+   - job: Build
+     pool: eShopOnWebSelfPool
+     steps:
 
    ```
 
-1. Reemplace las rutas de acceso codificadas en las tareas `Restore`, `Build` y `Test` por los parámetros que acaba de crear.
+1. Reemplaza las rutas de acceso codificadas de forma rígida en las tareas “Restaurar”, “Compilar” y “Probar” por los parámetros que acabas de crear.
 
    - **Reemplazar proyectos**: `**/*.sln` por proyectos: `${{ parameters.dotNetProjects }}` en las tareas `Restore` y `Build`.
    - **Reemplazar proyectos**: `tests/UnitTests/*.csproj` por proyectos: `${{ parameters.testProjects }}` en la tarea `Test`
 
-    Las tareas `Restore`, `Build` y `Test` en la sección de pasos del archivo YAML deben tener este aspecto:
-
-    {% raw %}
+   Las tareas "Restaurar", "Compilar" y "Probar" en la sección de pasos del archivo YAML deben tener este aspecto:
 
     ```yaml
     steps:
@@ -107,49 +104,48 @@ En esta tarea, establecerá los tipos de parámetro y parámetro para la canaliz
     
     ```
 
-    {% endraw %}
+1. Haz clic en **Validar y guardar** para guardar los cambios y, a continuación, haz clic en **Guardar**.
 
-1. Guarde y ejecute la canalización. Compruebe que la ejecución de canalización se completa correctamente.
+1. Ve a **Canalizaciones > Canalizaciones** y abre la canalización **eshoponweb-ci** que se ejecuta automáticamente.
+
+1. Comprueba que la ejecución de canalización se completa correctamente.
 
    ![Captura de pantalla de la ejecución de canalización con parámetros.](media/pipeline-parameters-run.png)
 
 #### Tarea 3: Protección de variables y parámetros
 
-En esta tarea, protegerá las variables y los parámetros de la canalización mediante grupos de variables.
+En esta tarea, protegerás las variables y los parámetros de la canalización mediante grupos de variables.
 
-1. Vaya a **Pipelines (Canalizaciones) > Library (Biblioteca)**.
+1. Ve a **Canalizaciones > Biblioteca**.
 
-1. Seleccione el botón **+ Grupo de variables** para crear un nuevo grupo de variables denominado **BuildConfigurations**.
+1. Selecciona el botón **+ Grupo de variables** para crear un nuevo grupo de variables denominado `BuildConfigurations`.
 
-1. Agregue una variable denominada **buildConfiguration** y establezca su valor en `Release`.
+1. Agrega una variable denominada `buildConfiguration` y establece su valor en `Release`.
 
-1. Guarde el grupo de variables.
+1. Guarda el grupo de variables.
 
    ![Captura de pantalla del grupo de variables con BuildConfigurations.](media/eshop-variable-group.png)
 
-1. Seleccione el botón **Pipeline permissions (Permisos de canalización)** y, luego, el botón **+** para agregar una canalización.
+1. Selecciona el botón **Permisos de canalización** y, luego, el botón **+** para agregar una nueva canalización.
 
-1. Seleccione la canalización **eshoponweb-ci-parameters** para permitir que la canalización use el grupo de variables.
+1. Selecciona la canalización **eshoponweb-ci** para permitir que la canalización use el grupo de variables.
 
    ![Captura de pantalla de los permisos de canalización.](media/pipeline-permissions.png)
 
-   > [!NOTE]
-   > También puede establecer usuarios o grupos específicos para poder editar el grupo de variables haciendo clic en el botón **Seguridad**.
+   > **Nota**: también puede establecer usuarios o grupos específicos para poder editar el grupo de variables haciendo clic en el botón **Seguridad**.
 
-1. Vaya a **Pipelines (Canalizaciones) > Pipelines (Canalizaciones)**.
+1. Ve a **Canalizaciones > Canalizaciones**.
 
-1. Abra la canalización **eshoponweb-ci-parameters** y seleccione **Edit (Editar)**.
+1. Abre la canalización **eshoponweb-ci** y selecciona **Editar**.
 
-1. En la parte superior del archivo yml, justo debajo de los parámetros, haga referencia al grupo de variables agregando lo siguiente:
+1. En la parte superior del archivo yml, justo debajo de los parámetros, haz referencia al grupo de variables agregando lo siguiente:
 
    ```yaml
    variables:
      - group: BuildConfigurations
    ```
 
-1. En la tarea “Compilar”, reemplace el comando “build” por las líneas siguientes para usar la configuración de compilación del grupo de variables.
-
-    {% raw %}
+1. En la tarea "Compilar", agrega el parámetro de configuración a la tarea para utilizar la configuración de compilación del grupo de variables.
 
     ```yaml
             command: 'build'
@@ -157,53 +153,40 @@ En esta tarea, protegerá las variables y los parámetros de la canalización me
             configuration: $(buildConfiguration)
     ```
 
-    {% endraw %}
+1. Haz clic en **Validar y guardar** para guardar los cambios y, a continuación, haz clic en **Guardar**.
 
-1. Guarde y ejecute la canalización. Debe ejecutarse correctamente con la configuración de compilación establecida en `Release`. Para comprobarlo, examine los registros de la tarea “Compilar”.
+1. Abre la ejecución de canalización **eshoponweb-ci**. Debe ejecutarse correctamente con la configuración de compilación establecida en "Liberar". Para comprobarlo, examina los registros de la tarea “Compilar”.
 
-> [!NOTE]
-> Siguiendo este enfoque, puede proteger las variables y los parámetros mediante el uso de grupos de variables sin tener que codificarlos de forma difícil en archivos YAML.
+> **Nota**: si no ves la configuración de compilación establecida en "Liberar" en los registros, habilita el diagnóstico del sistema y vuelve a ejecutar la canalización para ver el valor de configuración.
+
+> **Nota**: siguiendo este enfoque, puedes proteger las variables y los parámetros mediante el uso de grupos de variables sin tener que codificarlos de forma rígida en archivos YAML.
 
 #### Tarea 4: Validación de variables y parámetros obligatorios
 
-En esta tarea, validará las variables obligatorias antes de que se ejecute la canalización.
+En esta tarea, validarás las variables obligatorias antes de que se ejecute la canalización.
 
-1. Vaya a **Pipelines (Canalizaciones) > Pipelines (Canalizaciones)**.
+1. Ve a **Canalizaciones > Canalizaciones**.
 
-1. Abra la canalización **eshoponweb-ci-parameters** y seleccione **Edit (Editar)**.
+1. Abre la canalización **eshoponweb-ci** y selecciona **Editar**.
 
-1. En la sección de fases, al principio (siguiendo la línea `stage:`), agregue una nueva fase denominada **Validación** para validar las variables obligatorias antes de que se ejecute la canalización.
+1. En la sección de pasos, al principio (siguiendo la línea **steps:**), agrega una nueva tarea de script para validar las variables obligatorias antes de que se ejecute la canalización.
 
     ```yaml
-    - stage: Validate
-      displayName: Validate mandatory variables
-      jobs:
-      - job: ValidateVariables
-        pool:
-          vmImage: ubuntu-latest
-        steps:
-        - script: |
-            if [ -z "$(buildConfiguration)" ]; then
-              echo "Error: buildConfiguration variable is not set"
-              exit 1
-            fi
-          displayName: 'Validate Variables'
+    - script: |
+        IF NOT DEFINED buildConfiguration (
+          ECHO Error: buildConfiguration variable is not set
+          EXIT /B 1
+        )
+      displayName: 'Validate Variables'
      ```
 
-    > [!NOTE]
-    > Esta fase ejecutará un script para validar la variable buildConfiguration. Si no se establecen las variables, se producirá un error en el script y se detendrá la canalización.
+    > **Nota**: se trata de una validación sencilla para comprobar si la variable está establecida. Si no se establecen las variables, se producirá un error en el script y se detendrá la canalización. Puedes agregar una validación más compleja para comprobar el valor de la variable o si se estableció en un valor específico.
 
-1. Haga que la fase de **Compilación** dependa de la fase de **Validación** agregando `dependsOn: Validate` al principio de la fase de **Compilación**:
+1. Haz clic en **Validar y guardar** para guardar los cambios y, a continuación, haz clic en **Guardar**.
 
-    ```yaml
-    - stage: Build
-      displayName: Build .Net Core Solution
-      dependsOn: Validate
-    ```
+1. Abre la ejecución de canalización **eshoponweb-ci**. Se ejecutará correctamente porque la variable buildConfiguration se establece en el grupo de variables.
 
-1. Guarde y ejecute la canalización. Se ejecutará correctamente porque la variable buildConfiguration se establece en el grupo de variables.
-
-1. Para probar la validación, quite la variable buildConfiguration del grupo de variables o elimine el grupo de variables y vuelva a ejecutar la canalización. No debería completarse y debería aparecer el siguiente error:
+1. Para probar la validación, quita la variable buildConfiguration del grupo de variables o elimine el grupo de variables, o cambia el nombre de la variable, y vuelve a ejecutar la canalización. No debería completarse y debería aparecer el siguiente error:
 
     ```yaml
     Error: buildConfiguration variable is not set   
@@ -211,8 +194,11 @@ En esta tarea, validará las variables obligatorias antes de que se ejecute la c
 
     ![Captura de pantalla de la ejecución de canalización con error de validación.](media/pipeline-validation-fail.png)
 
-1. Vuelva a agregar el grupo de variables y la variable buildConfiguration al grupo de variables y vuelva a ejecutar la canalización. Debería ejecutarse correctamente.
+1. Vuelve a agregar la variable buildConfiguration al grupo de variables y vuelve a ejecutar la canalización. Debería ejecutarse correctamente.
 
-## Revisar
+> [!IMPORTANT]
+> Recuerda eliminar los recursos creados en Azure Portal para evitar cargos innecesarios.
 
-En este laboratorio, aprenda a configurar canalizaciones para usar de forma segura variables y parámetros.
+## Revisión
+
+En este laboratorio, aprendiste a configurar canalizaciones para usar de forma segura variables y parámetros, y cómo validar las variables y parámetros obligatorios.
