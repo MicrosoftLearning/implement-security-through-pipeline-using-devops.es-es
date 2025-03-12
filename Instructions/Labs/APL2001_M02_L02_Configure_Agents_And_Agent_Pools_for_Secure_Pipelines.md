@@ -12,9 +12,9 @@ Estos ejercicios duran aproximadamente **25** minutos.
 
 ## Antes de comenzar
 
-Necesitará una suscripción de Azure, una organización de Azure DevOps y la aplicación eShopOnWeb para seguir los laboratorios.
+Necesitarás una suscripción a Azure, una organización de Azure DevOps y la aplicación eShopOnWeb para seguir los laboratorios.
 
-- Siga los pasos para [validar el entorno de laboratorio](APL2001_M00_Validate_Lab_Environment.md).
+- Sigue los pasos para [validar el entorno de laboratorio](APL2001_M00_Validate_Lab_Environment.md).
 
 ## Instrucciones
 
@@ -65,9 +65,9 @@ En este ejercicio, creará una máquina virtual (VM) de Azure y la usará para c
 
 1. En la pestaña **Administración**, en la sección **Identidad**, seleccione la casilla de verificación **Habilitar identidad administrada asignada por el sistema** y, luego, seleccione **Revisar y crear**:
 
-1. En la pestaña **Revisar y crear**, seleccione **Crear**.
+1. En la pestaña **Revisar y crear**, selecciona **Crear**.
 
-   > **Nota**: Espere a que se complete el proceso de aprovisionamiento. Este proceso tardará alrededor de 2 minutos.
+   > **Nota**: espera a que se complete el proceso de aprovisionamiento. Este proceso tardará alrededor de 2 minutos.
 
 1. En Azure Portal, vaya a la página que muestra la configuración de la VM de Azure recién creada.
 
@@ -275,6 +275,6 @@ Para obtener más información sobre los grupos de agentes, consulte [Grupos de 
 > [!IMPORTANT]
 > Recuerda eliminar los recursos creados en Azure Portal para evitar cargos innecesarios.
 
-## Revisar
+## Revisión
 
 En este laboratorio, aprenderá a configurar agentes autohospedados y grupos de agentes de Azure DevOps y a administrar permisos para esos grupos. Al administrar los permisos de forma eficaz, puede asegurarse de que los usuarios adecuados tengan acceso a los recursos que necesitan al tiempo que mantienen la seguridad e integridad de los procesos de DevOps.

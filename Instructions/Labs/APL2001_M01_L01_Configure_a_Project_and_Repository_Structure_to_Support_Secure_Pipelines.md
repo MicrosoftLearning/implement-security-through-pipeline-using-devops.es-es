@@ -101,7 +101,7 @@ Empecemos importando la canalización de CI denominada [eshoponweb-ci.yml](https
 
    > **Nota**: la canalización adoptará un nombre en función del nombre del proyecto. Cambiarás el nombre para identificar la canalización con más facilidad.
 
-1. Ve a **Canalizaciones > Canalizaciones** y selecciona la canalización creada recientemente. Selecciona los puntos suspensivos (...) y, a continuación, selecciona la opción **Cambiar nombre/mover**.
+1. Ve a **Canalizaciones > Canalizaciones** y selecciona la canalización creada recientemente. Selecciona los puntos suspensivos (...) y, a continuación, selecciona **Cambiar nombre/mover**.
 
 1. Asígnale el nombre **eshoponweb-ci** y selecciona **Guardar**.
 

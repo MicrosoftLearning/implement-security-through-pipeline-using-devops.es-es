@@ -36,7 +36,7 @@ Empecemos importando la canalización de CI denominada [eshoponweb-ci.yml](https
 
 1. Selecciona el repositorio **eShopOnWeb**.
 
-1. Selecciona el **archivo YAML de Azure Pipelines existente**.
+1. Selecciona **Archivo YAML de Azure Pipelines existente**.
 
 1. Selecciona el archivo **/.ado/eshoponweb-ci.yml** y haz clic en **Continuar**.
 
