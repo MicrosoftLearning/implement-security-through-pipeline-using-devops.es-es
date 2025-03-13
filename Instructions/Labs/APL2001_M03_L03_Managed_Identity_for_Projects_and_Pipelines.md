@@ -96,7 +96,7 @@ Empecemos importando la canalización de CI denominada [eshoponweb-ci.yml](https
    - Reemplaza **YOUR-AZURE-SERVICE-CONNECTION-NAME** por **azure subs**
    - Reemplaza **YOUR-WEB-APP-NAME** por un nombre único global de la aplicación web que se va a implementar, por ejemplo, la cadena **eshoponweb-lab-multi-123456** seguida de un número aleatorio de seis dígitos.
 
-1. Selecciona **Guardar y ejecutar** y elige "commit" directamente en la rama principal.
+1. Selecciona **Guardar y ejecutar** y elige hacer "commit" directamente en la rama principal.
 
 1. Selecciona **Guardar y ejecutar** de nuevo.
 

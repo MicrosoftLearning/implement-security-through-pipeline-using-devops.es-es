@@ -12,7 +12,7 @@ Estos ejercicios duran aproximadamente **20** minutos.
 
 ## Antes de comenzar
 
-Necesitará una suscripción de Azure, una organización de Azure DevOps y la aplicación eShopOnWeb para seguir los laboratorios.
+Necesitarás una suscripción a Azure, una organización de Azure DevOps y la aplicación eShopOnWeb para seguir los laboratorios.
 
 - Siga los pasos para [validar el entorno de laboratorio](APL2001_M00_Validate_Lab_Environment.md).
 - Instale un agente autohospedado siguiendo el laboratorio [Configuración de agentes y grupos de agentes para canalizaciones seguras](APL2001_M02_L02_Configure_Agents_And_Agent_Pools_for_Secure_Pipelines.md) o los pasos descritos en [Instalación de un agente autohospedado](https://learn.microsoft.com/azure/devops/pipelines/agents/windows-agent).
@@ -27,47 +27,47 @@ En este ejercicio, importarás y ejecutarás las canalizaciones de CI/CD en el p
 
 Empecemos importando la canalización de CI denominada [eshoponweb-ci.yml](https://github.com/MicrosoftLearning/eShopOnWeb/blob/main/.ado/eshoponweb-ci.yml).
 
-1. Vaya al portal de Azure DevOps en `https://aex.dev.azure.com` y abra su organización.
+1. Ve al portal de Azure DevOps en `https://aex.dev.azure.com` y abre tu organización.
 
-1. Abra el proyecto **eShopOnWeb** en Azure DevOps.
+1. Abre el proyecto **eShopOnWeb** en Azure DevOps.
 
-1. Vaya a **Pipelines (Canalizaciones) > Pipelines (Canalizaciones)**.
+1. Ve a **Canalizaciones > Canalizaciones**.
 
-1. Seleccione el botón **Crear canalización**.
+1. Selecciona el botón **Crear canalización**.
 
-1. Seleccione **Git de Azure Repos (YAML)**.
+1. Selecciona **Git de Azure Repos (YAML)**.
 
 1. Selecciona el repositorio **eShopOnWeb**.
 
-1. Selecciona el **archivo YAML de Azure Pipelines existente**.
+1. Selecciona **Archivo YAML de Azure Pipelines existente**.
 
-1. Seleccione el archivo **/.ado/eshoponweb-ci.yml** y haga clic en **Continuar**.
+1. Selecciona el archivo **/.ado/eshoponweb-ci.yml** y haz clic en **Continuar**.
 
-1. Haga clic en el botón **Run (Ejecutar)** para ejecutar la canalización.
+1. Haz clic en el botón **Ejecutar** para ejecutar la canalización.
 
-   > **Nota**: la canalización adoptará un nombre en función del nombre del proyecto. Cambiará el nombre para identificar la canalización con más facilidad.
+   > **Nota**: la canalización adoptará un nombre en función del nombre del proyecto. Cambiarás el nombre para identificar la canalización con más facilidad.
 
-1. Vaya a **Pipelines (Canalizaciones) > Pipelines (Canalizaciones)** y seleccione la canalización creada recientemente. Seleccione los puntos suspensivos (...) y, a continuación, seleccione **Cambiar nombre/mover**.
+1. Ve a **Canalizaciones > Canalizaciones** y selecciona la canalización creada recientemente. Selecciona los puntos suspensivos (...) y, a continuación, selecciona **Cambiar nombre/mover**.
 
-1. Asígnele el nombre **eshoponweb-ci** y seleccione **Guardar**.
+1. Asígnale el nombre **eshoponweb-ci** y selecciona **Guardar**.
 
 #### Tarea 2: (omitir si ya la has completado) Importación y ejecución de la canalización de CD
 
 > **Nota**: en esta tarea, importarás y ejecutarás la canalización de CD denominada [eshoponweb-cd-webapp-code.yml](https://github.com/MicrosoftLearning/eShopOnWeb/blob/main/.ado/eshoponweb-cd-webapp-code.yml).
 
-1. Vaya a **Pipelines (Canalizaciones) > Pipelines (Canalizaciones)**.
+1. Ve a **Canalizaciones > Canalizaciones**.
 
-1. Seleccione el botón **New Pipeline (Nueva canalización)**.
+1. Selecciona el botón **Nueva canalización**.
 
-1. Seleccione **Git de Azure Repos (YAML)**.
+1. Selecciona **Git de Azure Repos (YAML)**.
 
 1. Selecciona el repositorio **eShopOnWeb**.
 
-1. Seleccione **Archivo YAML de Azure Pipelines existente**.
+1. Selecciona **Archivo YAML de Azure Pipelines existente**.
 
-1. Seleccione el archivo **/.ado/eshoponweb-cd-webapp-code.yml** y, después, seleccione **Continuar**.
+1. Selecciona el archivo **/.ado/eshoponweb-cd-webapp-code.yml** y, después, selecciona **Continuar**.
 
-1. En la definición de canalización de YAML, establezca la sección variables de la siguiente manera:
+1. En la definición de canalización de YAML, establece la sección variables de la siguiente manera:
 
    ```yaml
    variables:
@@ -79,7 +79,7 @@ Empecemos importando la canalización de CI denominada [eshoponweb-ci.yml](https
      webappname: 'YOUR-WEB-APP-NAME'
    ```
 
-1. Reemplace los valores de las variables por los valores correctos de su entorno:
+1. Reemplaza los valores de las variables por los valores correctos de tu entorno:
 
    - Reemplaza **YOUR-RESOURCE-GROUP-NAME** por el nombre del grupo de recursos que deseas usar en este laboratorio, por ejemplo, **rg-eshoponweb-multi**.
    - Establece el valor de la variable **location** en el nombre de la región de Azure en la que quieres implementar los recursos, por ejemplo, **centralus**.
@@ -87,11 +87,11 @@ Empecemos importando la canalización de CI denominada [eshoponweb-ci.yml](https
    - Reemplaza **YOUR-AZURE-SERVICE-CONNECTION-NAME** por **azure subs**
    - Reemplaza **YOUR-WEB-APP-NAME** por un nombre único global de la aplicación web que se va a implementar, por ejemplo, la cadena **eshoponweb-lab-multi-123456** seguida de un número aleatorio de seis dígitos.
 
-1. Selecciona **Guardar y ejecutar** y elige "commit" directamente en la rama principal.
+1. Selecciona **Guardar y ejecutar** y elige hacer "commit" directamente en la rama principal.
 
-1. Seleccione **Save and Run (Guardar y ejecutar)** de nuevo.
+1. Selecciona **Guardar y ejecutar** de nuevo.
 
-1. Abra la ejecución de la canalización. Si ves el mensaje “Esta canalización necesita permiso para acceder a un recurso antes de que esta ejecución pueda continuar con Implementar en WebApp”, selecciona **Ver**, **Permitir** y **Permitir** de nuevo. Esto es necesario para permitir que la canalización cree el recurso de Azure App Service.
+1. Abre la ejecución de la canalización. Si ves el mensaje “Esta canalización necesita permiso para acceder a un recurso antes de que esta ejecución pueda continuar con Implementar en WebApp”, selecciona **Ver**, **Permitir** y **Permitir** de nuevo. Esto es necesario para permitir que la canalización cree el recurso de Azure App Service.
 
    ![Captura de pantalla del permiso de acceso desde la canalización de YAML.](media/pipeline-deploy-permit-resource.png)
 
@@ -104,7 +104,7 @@ Empecemos importando la canalización de CI denominada [eshoponweb-ci.yml](https
 
    > **Nota**: la canalización adoptará un nombre en función del nombre del proyecto. Vamos a **cambiarle el nombre** para identificar mejor la canalización.
 
-1. Ve a **Canalizaciones > Canalizaciones** y selecciona la canalización creada recientemente. Selecciona los puntos suspensivos (...) y, a continuación, selecciona **Cambiar nombre/mover**.
+1. Ve a **Canalizaciones > Canalizaciones** y selecciona la canalización creada recientemente. Selecciona los puntos suspensivos (...) y, a continuación, selecciona la opción **Cambiar nombre/mover**.
 
 1. Asígnale el nombre **eshoponweb-cd-webapp-code** y haz clic en **Guardar**.
 
