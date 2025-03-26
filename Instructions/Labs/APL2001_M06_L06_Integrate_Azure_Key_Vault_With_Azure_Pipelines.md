@@ -112,7 +112,7 @@ En este escenario de laboratorio, habrá una instancia de Azure Container Inst
 
    | Configuración | Valor |
    | --- | --- |
-   | Suscripción | nombre de la suscripción a Azure que usas en este laboratorio |
+   | Suscripción | Nombre de la suscripción a Azure que usas en este laboratorio |
    | Grupo de recursos | el nombre del grupo de recursos **rg-eshoponweb-secure** |
    | Nombre del almacén de claves | cualquier nombre válido único, como **ewebshop-kv** |
    | Región | la misma región de Azure que elegiste anteriormente en este laboratorio |

@@ -32,7 +32,7 @@ En este ejercicio, crearás una canalización YAML de varias fases en Azure DevO
 
 1. Haz clic en el botón **Nueva canalización**.
 
-1. Selecciona **GIT de Azure Repos (YAML)**.
+1. Selecciona **Git de Azure Repos (YAML)**.
 
 1. Selecciona el repositorio **eShopOnWeb**.
 
