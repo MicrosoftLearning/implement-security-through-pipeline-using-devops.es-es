@@ -155,7 +155,7 @@ En este ejercicio, usarás una identidad administrada para configurar una nueva 
 
 1. Haz clic en el botón **Nueva conexión de servicio** y selecciona **Azure Resource Manager**.
 
-1. Selecciona **Identidad administrada** como **Método de autenticación**.
+1. Selecciona **Identidad administrada (agent-assigned)** como **Método de autenticación**.
 
 1. Establece el nivel de ámbito en **Suscripción** y proporciona la información de Azure Portal, incluido el **Id. de suscripción**, el **nombre de suscripción** y el **Id. de inquilino**.
 
